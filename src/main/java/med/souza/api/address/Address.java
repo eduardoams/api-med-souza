@@ -27,4 +27,28 @@ public class Address {
         this.uf = data.uf();
         this.cep = data.cep();
     }
+
+    public void update(AddressSaveData data) {
+        if (data.publicPlace() != null) {
+            this.publicPlace = data.publicPlace();
+        }
+        if (data.number() != null) {
+            this.number = data.number();
+        }
+        if (data.complement() != null) {
+            this.complement = data.complement();
+        }
+        if (data.neighborhood() != null) {
+            this.neighborhood = data.neighborhood();
+        }
+        if (data.city() != null) {
+            this.city = data.city();
+        }
+        if (data.uf() != null) {
+            this.uf = data.uf();
+        }
+        if (data.cep() != null) {
+            this.cep = data.cep();
+        }
+    }
 }
