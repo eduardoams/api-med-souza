@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.souza.api.address.Address;
+import med.souza.api.address.AddressSaveData;
 
 @Entity
 @Table(name = "tb_doctor")
@@ -36,5 +37,21 @@ public class Doctor {
         this.crm = data.crm();
         this.specialty = data.specialty();
         this.address = new Address(data.address());
+    }
+
+    public void update(DoctorUpdateData data) {
+        if (data.name() != null) {
+            this.name = data.name();
+        }
+        if (data.telephone() != null) {
+            this.telephone = data.telephone();
+        }
+        if (data.address() != null) {
+            this.address.update(data.address());
+        }
+    }
+
+    public void delete() {
+        this.active = false;
     }
 }
