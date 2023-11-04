@@ -23,6 +23,7 @@ public class Doctor {
     private String email;
     private String telephone;
     private String crm;
+    private Boolean active;
 
     @Enumerated(EnumType.STRING)
     private SpecialtyEnum specialty;
@@ -31,6 +32,7 @@ public class Doctor {
     private Address address;
 
     public Doctor (DoctorSaveData data) {
+        this.active = true;
         this.name = data.name();
         this.email = data.email();
         this.telephone = data.telephone();
