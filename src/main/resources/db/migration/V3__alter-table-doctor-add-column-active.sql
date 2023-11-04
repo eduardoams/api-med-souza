@@ -1,0 +1,1 @@
+alter table tb_doctor add column active boolean default 1 not null;
