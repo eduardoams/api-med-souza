@@ -8,16 +8,16 @@ import jakarta.validation.constraints.Pattern;
 import med.souza.api.domain.address.AddressSaveData;
 
 public record DoctorSaveData(
-        @NotBlank
+        @NotBlank(message = "{name.notblank}")
         String name,
-        @NotBlank @Email
+        @NotBlank(message = "{email.notblank}") @Email(message = "{email.invalid}")
         String email,
-        @NotBlank
+        @NotBlank(message = "{telephone.notblank}")
         String telephone,
-        @NotBlank @Pattern(regexp = "\\d{4,6}")
+        @NotBlank(message = "{crm.notblank}") @Pattern(regexp = "\\d{4,6}", message = "{crm.invalid}")
         String crm,
-        @NotNull
+        @NotNull(message = "{specialty.notnull}")
         SpecialtyEnum specialty,
-        @NotNull @Valid
+        @NotNull(message = "{address.notnull}") @Valid
         AddressSaveData address) {
 }
