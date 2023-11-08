@@ -1,9 +1,9 @@
-package med.souza.api.doctor;
+package med.souza.api.domain.patient;
 
 import jakarta.validation.constraints.NotNull;
-import med.souza.api.address.AddressSaveData;
+import med.souza.api.domain.address.AddressSaveData;
 
-public record DoctorUpdateData(
+public record PatientUpdateData(
         @NotNull
         Long id,
         String name,

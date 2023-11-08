@@ -1,7 +1,6 @@
-package med.souza.api.patient;
+package med.souza.api.domain.patient;
 
-import med.souza.api.address.Address;
-import med.souza.api.patient.Patient;
+import med.souza.api.domain.address.Address;
 
 public record PatientDetailingData(Long id, String name, String email, String cpf, String telephone, Address address) {
 

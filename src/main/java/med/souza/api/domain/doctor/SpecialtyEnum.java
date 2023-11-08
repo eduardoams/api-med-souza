@@ -1,4 +1,4 @@
-package med.souza.api.doctor;
+package med.souza.api.domain.doctor;
 
 public enum SpecialtyEnum {
     ORTOPEDIA,

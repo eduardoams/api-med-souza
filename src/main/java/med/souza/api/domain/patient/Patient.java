@@ -1,11 +1,11 @@
-package med.souza.api.patient;
+package med.souza.api.domain.patient;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import med.souza.api.address.Address;
+import med.souza.api.domain.address.Address;
 
 @Entity
 @Table(name = "tb_patient")

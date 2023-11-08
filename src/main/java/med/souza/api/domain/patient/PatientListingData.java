@@ -1,4 +1,4 @@
-package med.souza.api.patient;
+package med.souza.api.domain.patient;
 
 public record PatientListingData(Long id, String name, String email, String cpf) {
 

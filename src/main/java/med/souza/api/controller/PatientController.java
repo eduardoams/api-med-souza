@@ -1,8 +1,7 @@
 package med.souza.api.controller;
 
 import jakarta.validation.Valid;
-import med.souza.api.patient.PatientDetailingData;
-import med.souza.api.patient.*;
+import med.souza.api.domain.patient.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

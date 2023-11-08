@@ -1,8 +1,7 @@
 package med.souza.api.controller;
 
 import jakarta.validation.Valid;
-import med.souza.api.doctor.*;
-import org.apache.coyote.Response;
+import med.souza.api.domain.doctor.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/doctors")

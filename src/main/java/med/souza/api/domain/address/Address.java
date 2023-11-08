@@ -1,4 +1,4 @@
-package med.souza.api.address;
+package med.souza.api.domain.address;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

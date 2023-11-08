@@ -1,4 +1,4 @@
-package med.souza.api.doctor;
+package med.souza.api.domain.doctor;
 
 public record DoctorListingData(Long id, String name, String email, String crm, SpecialtyEnum specialty) {
 
