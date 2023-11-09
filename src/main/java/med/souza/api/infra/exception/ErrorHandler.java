@@ -1,4 +1,4 @@
-package med.souza.api.exception;
+package med.souza.api.infra.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
