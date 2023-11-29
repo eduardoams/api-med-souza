@@ -31,7 +31,7 @@ public class DoctorController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DoctorListingData>> list(@PageableDefault(size = 1, sort = {"name"}) Pageable p) {
+    public ResponseEntity<Page<DoctorListingData>> list(@PageableDefault(size = 20, sort = {"name"}) Pageable p) {
         return ResponseEntity.ok(repository.findAllByActiveTrue(p).map(DoctorListingData::new));
     }
 
