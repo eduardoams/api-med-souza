@@ -55,4 +55,18 @@ public class Doctor {
     public void delete() {
         this.active = false;
     }
+
+    @Override
+    public String toString() {
+        return "Doctor{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", crm='" + crm + '\'' +
+                ", active=" + active +
+                ", specialty=" + specialty +
+                ", address=" + address +
+                '}';
+    }
 }
