@@ -31,13 +31,10 @@ public class ConsultationService {
         Patient patient = patientService.findById(data.idPatient());
 
         Doctor doctor = chooseAvailableDoctor(data);
-        System.out.println("teste teste teste teste teste");
-        System.out.println(doctor);
 
+        Consultation consultation = new Consultation(null, doctor, patient, data.date(), null, true);
 
-        /*Consultation consultation = new Consultation(null, doctor, patient, data.date());
-
-        consultationRepository.save(consultation);*/
+        consultationRepository.save(consultation);
     }
 
     public Doctor chooseAvailableDoctor(ConsultationSaveData data) {
