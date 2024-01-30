@@ -10,6 +10,8 @@ import med.souza.api.domain.patient.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -48,5 +50,21 @@ public class ConsultationService {
         }
 
         return doctorService.chooseAvailableDoctor(data.specialty(), data.date());
+    }
+
+    public void cancel(ConsultationCancelData data) {
+        Consultation consultation = findByIdAndActiveTrue(data.id());
+        Duration advanceTime = Duration.between(LocalDateTime.now(), consultation.getDate());
+
+        if (advanceTime.toMinutes() > 1440) {
+            consultation.cancel(data);
+        } else {
+            throw new RuntimeException("Não é possível cancelar uma consulta com menos de 24 horas de antecedência");
+        }
+    }
+
+    public Consultation findByIdAndActiveTrue(Long id) {
+        Optional<Consultation> consultation = consultationRepository.findByIdAndActiveTrue(id);
+        return consultation.orElseThrow(() -> new IntegrityValidationException("Nenhuma consulta em aberto encontrada com o ID " + id));
     }
 }
