@@ -1,1 +1,0 @@
-alter table tb_patient add column active boolean default 1 not null;

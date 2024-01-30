@@ -11,6 +11,7 @@ create table tb_patient(
     number varchar(20),
     uf char(2) not null,
     city varchar(100) not null,
+    active boolean default true not null,
 
     primary key(id)
 );
