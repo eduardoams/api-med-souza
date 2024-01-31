@@ -1,6 +1,7 @@
 package med.souza.api.infra.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import med.souza.api.domain.exception.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -51,6 +52,11 @@ public class ErrorHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> errorForbidden() {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden");
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<String> errorBusinessRule(ValidationException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
     public record ValidationErrorData(String field, String message) {
