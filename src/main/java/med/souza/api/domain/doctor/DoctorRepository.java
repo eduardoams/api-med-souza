@@ -23,4 +23,11 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
             ORDER BY rand() LIMIT 1
             """)
     Doctor chooseAvailableDoctor(SpecialtyEnum specialty, LocalDateTime date);
+
+    @Query("""
+           SELECT d.active
+           FROM Doctor d
+           WHERE d.id = :id
+           """)
+    Boolean findActiveById(Long id);
 }

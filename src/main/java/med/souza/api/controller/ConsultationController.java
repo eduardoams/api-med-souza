@@ -17,8 +17,8 @@ public class ConsultationController {
     @PostMapping
     @Transactional
     public ResponseEntity<ConsultationDetailingData> scheduleAppointment(@RequestBody @Valid ConsultationSaveData data) {
-        appointmentScheduleService.toSchedule(data);
-        return ResponseEntity.ok(new ConsultationDetailingData(null, null, null, null));
+        ConsultationDetailingData dto = appointmentScheduleService.toSchedule(data);
+        return ResponseEntity.ok().body(dto);
     }
 
     @DeleteMapping
