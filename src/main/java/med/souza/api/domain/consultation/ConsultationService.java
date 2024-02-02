@@ -1,6 +1,7 @@
 package med.souza.api.domain.consultation;
 
-import med.souza.api.domain.consultation.validation.ValidationInterface;
+import med.souza.api.domain.consultation.validation.CancellationValidationInterface;
+import med.souza.api.domain.consultation.validation.SchedulingValidationInterface;
 import med.souza.api.domain.doctor.Doctor;
 import med.souza.api.domain.doctor.DoctorService;
 import med.souza.api.domain.exception.ValidationException;
@@ -9,8 +10,6 @@ import med.souza.api.domain.patient.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,14 +26,17 @@ public class ConsultationService {
     private DoctorService doctorService;
 
     @Autowired
-    private List<ValidationInterface> validations;
+    private List<SchedulingValidationInterface> schedulingValidations;
+
+    @Autowired
+    private List<CancellationValidationInterface> cancellationValidations;
 
     public ConsultationDetailingData toSchedule(ConsultationSaveData data) {
 
         Patient patient = patientService.findById(data.idPatient());
         Doctor doctor = chooseAvailableDoctor(data);
 
-        validations.forEach(v -> v.validate(data));
+        schedulingValidations.forEach(v -> v.validate(data));
 
         Consultation consultation = new Consultation(null, doctor, patient, data.date(), null, true);
         consultationRepository.save(consultation);
@@ -61,13 +63,9 @@ public class ConsultationService {
 
     public void cancel(ConsultationCancelData data) {
         Consultation consultation = findByIdAndActiveTrue(data.id());
-        Duration advanceTime = Duration.between(LocalDateTime.now(), consultation.getDate());
 
-        if (advanceTime.toMinutes() > 1440) {
-            consultation.cancel(data);
-        } else {
-            throw new ValidationException("Não é possível cancelar uma consulta com menos de 24 horas de antecedência");
-        }
+        cancellationValidations.forEach(v -> v.validate(data, consultation));
+        consultation.cancel(data);
     }
 
     public Consultation findByIdAndActiveTrue(Long id) {
