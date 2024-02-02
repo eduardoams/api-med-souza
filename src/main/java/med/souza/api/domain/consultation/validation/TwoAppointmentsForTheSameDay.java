@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class TwoAppointmentsForTheSameDay implements ValidationInterface {
+public class TwoAppointmentsForTheSameDay implements SchedulingValidationInterface {
 
     @Autowired
     private ConsultationRepository consultationRepository;
@@ -17,6 +17,7 @@ public class TwoAppointmentsForTheSameDay implements ValidationInterface {
     /**
      * Verifica se o paciente possui consulta agendada no dia.
      */
+    @Override
     public void validate(ConsultationSaveData data) {
         LocalDateTime firstTime = data.date().withHour(7);
         LocalDateTime endTime = data.date().withHour(18);

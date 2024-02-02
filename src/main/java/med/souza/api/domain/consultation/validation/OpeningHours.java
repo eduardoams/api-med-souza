@@ -7,11 +7,12 @@ import org.springframework.stereotype.Component;
 import java.time.DayOfWeek;
 
 @Component
-public class OpeningHours implements ValidationInterface {
+public class OpeningHours implements SchedulingValidationInterface {
 
     /**
      * Verifica se a consulta está sendo agendada dentro do horário de funcionamento.
      */
+    @Override
     public void validate(ConsultationSaveData data) {
         int startTime = 7;
         int endTime = 19;

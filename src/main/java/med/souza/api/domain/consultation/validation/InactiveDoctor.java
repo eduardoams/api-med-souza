@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InactiveDoctor implements ValidationInterface {
+public class InactiveDoctor implements SchedulingValidationInterface {
 
     @Autowired
     private DoctorRepository doctorRepository;
@@ -15,6 +15,7 @@ public class InactiveDoctor implements ValidationInterface {
     /**
      * Verifica se o médico está inativo.
      */
+    @Override
     public void validate(ConsultationSaveData data) {
         //Escolha de médico opcional
         if (data.idDoctor() == null) {

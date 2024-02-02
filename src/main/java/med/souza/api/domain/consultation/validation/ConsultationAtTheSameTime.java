@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ConsultationAtTheSameTime implements ValidationInterface {
+public class ConsultationAtTheSameTime implements SchedulingValidationInterface {
 
     @Autowired
     private ConsultationRepository consultationRepository;
@@ -15,6 +15,7 @@ public class ConsultationAtTheSameTime implements ValidationInterface {
     /**
      * Verifica se já existe uma consulta agendada no horário.
      */
+    @Override
     public void validate(ConsultationSaveData data) {
         boolean hasConsultation = consultationRepository.existsByDoctorIdAndDate(data.idDoctor(), data.date());
 

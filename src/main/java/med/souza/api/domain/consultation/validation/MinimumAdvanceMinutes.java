@@ -8,11 +8,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Component
-public class MinimumAdvance implements ValidationInterface {
+public class MinimumAdvanceMinutes implements SchedulingValidationInterface {
 
     /**
      * Verifica se a consulta está respeitando o tempo mínimo de antecedência.
      */
+    @Override
     public void validate(ConsultationSaveData data) {
         int minimumAdvanceMinutes = 30;
         LocalDateTime consultationDate = data.date();

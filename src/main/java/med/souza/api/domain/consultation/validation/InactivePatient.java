@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InactivePatient implements ValidationInterface {
+public class InactivePatient implements SchedulingValidationInterface {
 
     @Autowired
     private PatientRepository patientRepository;
@@ -15,6 +15,7 @@ public class InactivePatient implements ValidationInterface {
     /**
      * Verifica se o paciente está inativo.
      */
+    @Override
     public void validate(ConsultationSaveData data) {
         boolean isActive = patientRepository.findActiveById(data.idPatient());
 
