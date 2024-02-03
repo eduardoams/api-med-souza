@@ -1,5 +1,6 @@
 package med.souza.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import med.souza.api.domain.consultation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/consultations")
+@SecurityRequirement(name = "bearer-key")
 public class ConsultationController {
 
     @Autowired
