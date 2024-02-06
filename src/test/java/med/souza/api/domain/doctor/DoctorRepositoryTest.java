@@ -3,7 +3,6 @@ package med.souza.api.domain.doctor;
 import med.souza.api.domain.address.AddressSaveData;
 import med.souza.api.domain.consultation.Consultation;
 import med.souza.api.domain.consultation.ConsultationRepository;
-import med.souza.api.domain.consultation.ConsultationSaveData;
 import med.souza.api.domain.patient.Patient;
 import med.souza.api.domain.patient.PatientRepository;
 import med.souza.api.domain.patient.PatientSaveData;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -25,6 +25,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
 class DoctorRepositoryTest {
+
+    //Próxima segunda-feira às 15h
+    private static final LocalDateTime consultationDate = LocalDate.now()
+            .with(TemporalAdjusters.next(DayOfWeek.MONDAY))
+            .atTime(15, 0);
 
     @Autowired
     private DoctorRepository doctorRepository;
@@ -39,18 +44,13 @@ class DoctorRepositoryTest {
     @DisplayName("Deve devolver null quando único médico cadastrado não está disponível na data")
     void chooseAvailableDoctor1() {
         //Given
-        //Próxima segunda-feira às 15h
-        LocalDateTime date = LocalDate.now()
-                .with(TemporalAdjusters.next(DayOfWeek.MONDAY))
-                .atTime(15, 0);
-
         SpecialtyEnum specialty = SpecialtyEnum.CARDIOLOGIA;
         Doctor doctor = registerDoctor("César Sampaio", "cesar@medsouza.com", specialty);
         Patient patient = registerPatient("José Francisco", "jose@gmail.com", "45356439032");
-        registerConsultation(doctor, patient, date);
+        registerConsultation(doctor, patient, consultationDate);
 
         //When
-        Doctor freeDoctor = doctorRepository.chooseAvailableDoctor(specialty, date);
+        Doctor freeDoctor = doctorRepository.chooseAvailableDoctor(specialty, consultationDate);
 
         //Then
         assertThat(freeDoctor).isNull();
@@ -60,16 +60,60 @@ class DoctorRepositoryTest {
     @DisplayName("Deve devolver o médico quando for o único cadastrado e estiver disponível na data")
     void chooseAvailableDoctor2() {
         //Given
-        //Próxima segunda-feira às 15h
-        LocalDateTime date = LocalDate.now()
-                .with(TemporalAdjusters.next(DayOfWeek.MONDAY))
-                .atTime(15, 0);
-
         SpecialtyEnum specialty = SpecialtyEnum.CARDIOLOGIA;
         Doctor doctor = registerDoctor("César Sampaio", "cesar@medsouza.com", specialty);
 
         //When
-        Doctor freeDoctor = doctorRepository.chooseAvailableDoctor(specialty, date);
+        Doctor freeDoctor = doctorRepository.chooseAvailableDoctor(specialty, consultationDate);
+
+        //Then
+        assertThat(freeDoctor).isEqualTo(doctor);
+    }
+
+    @Test
+    @DisplayName("Deve devolver null quando não há médico cadastrado")
+    void chooseAvailableDoctor3() {
+        //When
+        Doctor freeDoctor = doctorRepository.chooseAvailableDoctor(SpecialtyEnum.CARDIOLOGIA, consultationDate);
+
+        //Then
+        assertThat(freeDoctor).isNull();
+    }
+
+    @Test
+    @DisplayName("Deve devolver null quando há médico cadastrado, porém, inativo")
+    void chooseAvailableDoctor4() {
+        //Given
+        SpecialtyEnum specialty = SpecialtyEnum.CARDIOLOGIA;
+        Doctor doctor = registerDoctor("César Sampaio", "cesar@medsouza.com", specialty);
+        deleteDoctor(doctor.getId());
+
+        //When
+        Doctor freeDoctor = doctorRepository.chooseAvailableDoctor(specialty, consultationDate);
+
+        //Then
+        assertThat(freeDoctor).isNull();
+    }
+
+    @Test
+    @DisplayName("Deve devolver o médico quando está disponível em outro horário do mesmo dia")
+    void chooseAvailableDoctor5() {
+        //Given
+        //Próxima segunda-feira às 14h
+        LocalDateTime consultationDateJose = LocalDate.now()
+                .with(TemporalAdjusters.next(DayOfWeek.MONDAY))
+                .atTime(14, 0);
+
+        SpecialtyEnum specialty = SpecialtyEnum.DERMATOLOGIA;
+        Doctor doctor = registerDoctor("César Sampaio", "cesar@medsouza.com", specialty);
+
+        Patient patientJose = registerPatient("José Francisco", "jose@gmail.com", "45356439032");
+        registerConsultation(doctor, patientJose, consultationDateJose);
+
+        registerPatient("Yuri Martins", "yuri@gmail.com", "45356439078");
+
+        //When
+        Doctor freeDoctor = doctorRepository.chooseAvailableDoctor(specialty, consultationDate);
 
         //Then
         assertThat(freeDoctor).isEqualTo(doctor);
@@ -109,10 +153,12 @@ class DoctorRepositoryTest {
     }
 
     private PatientSaveData dataPatient(String name, String email, String cpf) {
-        return new PatientSaveData(name, email, "11952920203", "31718053088", dataAddress());
+        return new PatientSaveData(name, email, "11952920203", cpf, dataAddress());
     }
 
-    private ConsultationSaveData dataConsultation(Long idDoctor, Long idPatient, LocalDateTime date, SpecialtyEnum specialty) {
-        return new ConsultationSaveData(idDoctor, idPatient, date, specialty);
+    @Transactional
+    protected void deleteDoctor(Long id) {
+        Doctor doctor = doctorRepository.getReferenceById(id);
+        doctor.delete();
     }
 }
