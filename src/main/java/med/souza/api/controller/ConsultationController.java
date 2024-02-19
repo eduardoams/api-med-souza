@@ -14,19 +14,19 @@ import org.springframework.web.bind.annotation.*;
 public class ConsultationController {
 
     @Autowired
-    private ConsultationService appointmentScheduleService;
+    private ConsultationService consultationService;
 
     @PostMapping
     @Transactional
     public ResponseEntity<ConsultationDetailingData> scheduleAppointment(@RequestBody @Valid ConsultationSaveData data) {
-        ConsultationDetailingData dto = appointmentScheduleService.toSchedule(data);
+        ConsultationDetailingData dto = consultationService.toSchedule(data);
         return ResponseEntity.ok().body(dto);
     }
 
     @DeleteMapping
     @Transactional
     public ResponseEntity<Void> cancelAppointment(@RequestBody @Valid ConsultationCancelData data) {
-        appointmentScheduleService.cancel(data);
+        consultationService.cancel(data);
         return ResponseEntity.noContent().build();
     }
 }
